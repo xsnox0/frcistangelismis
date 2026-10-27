@@ -1,0 +1,57 @@
+<UserControl x:Class="Frcistan.Diyaloglar.AktarimDiyalogu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:a="clr-namespace:Frcistan.Altyapi"
+             xmlns:k="clr-namespace:Frcistan.Kontroller">
+    <k:DiyalogGovdesi Baslik="{Binding Baslik}" AltBaslik="XAMPP'taki eski Frcistan 0.1 veritabanından ürün, kategori ve kullanıcıları içeri alın." Ikon="&#xE898;"
+                      HataMetni="{Binding Hata}" Mesgul="{Binding Mesgul}">
+        <k:DiyalogGovdesi.Alt>
+            <StackPanel Orientation="Horizontal">
+                <Button Style="{StaticResource Dugme.Hayalet}" Content="Kapat" Command="{Binding IptalCommand}" Margin="0,0,8,0" Padding="16,0" />
+                <Button a:Ui.Ikon="&#xE721;" Content="Kontrol et" Command="{Binding OnizleCommand}" Margin="0,0,8,0" />
+                <Button Style="{StaticResource Dugme.Birincil}" a:Ui.Ikon="&#xE898;" Content="Aktar" Command="{Binding AktarCommand}" Padding="20,0" />
+            </StackPanel>
+        </k:DiyalogGovdesi.Alt>
+        <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="12" />
+                    <ColumnDefinition Width="110" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="Sunucu" Style="{StaticResource Yazi.Etiket}" />
+                    <TextBox Text="{Binding Sunucu, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Port" Style="{StaticResource Yazi.Etiket}" />
+                    <TextBox Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}" a:Ui.Sayi="Tam" MaxLength="5" />
+                </StackPanel>
+            </Grid>
+            <TextBlock Text="0.1 veritabanı adı" Style="{StaticResource Yazi.Etiket}" Margin="0,14,0,7" />
+            <TextBox Text="{Binding Veritabani, UpdateSourceTrigger=PropertyChanged}" />
+            <Grid Margin="0,14,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="12" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="Kullanıcı" Style="{StaticResource Yazi.Etiket}" />
+                    <TextBox Text="{Binding Kullanici, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Şifre" Style="{StaticResource Yazi.Etiket}" />
+                    <PasswordBox a:Ui.Sifre="{Binding Sifre}" />
+                </StackPanel>
+            </Grid>
+            <TextBlock Text="XAMPP'ta varsayılan port 3306'dır; 0.1 kurulumunuz 3307 kullanıyorsa değiştirin." Style="{StaticResource Yazi.Kucuk}" Margin="0,10,0,0" TextWrapping="Wrap" />
+            <Border Background="{DynamicResource BasariYumusak}" CornerRadius="9" Padding="12,9" Margin="0,14,0,0" Visibility="{Binding Onizleme, Converter={StaticResource DoluGorunur}}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#xE73E;" FontFamily="{StaticResource IkonYazi}" Foreground="{DynamicResource BasariMetin}" Margin="0,1,9,0" />
+                    <TextBlock Text="{Binding Onizleme}" Foreground="{DynamicResource BasariMetin}" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </k:DiyalogGovdesi>
+</UserControl>

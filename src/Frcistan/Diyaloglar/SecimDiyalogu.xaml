@@ -1,0 +1,28 @@
+<UserControl x:Class="Frcistan.Diyaloglar.SecimDiyalogu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:k="clr-namespace:Frcistan.Kontroller">
+    <k:DiyalogGovdesi Baslik="{Binding Baslik}" Ikon="&#xE8AB;" HataMetni="{Binding Hata}" Mesgul="{Binding Mesgul}">
+        <k:DiyalogGovdesi.Alt>
+            <StackPanel Orientation="Horizontal">
+                <Button Style="{StaticResource Dugme.Hayalet}" Content="Vazgeç" Command="{Binding IptalCommand}" Margin="0,0,8,0" Padding="16,0" />
+                <Button Content="{Binding OnayMetni}" Command="{Binding OnayCommand}" Padding="20,0">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource Dugme.Birincil}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Tehlikeli}" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource Tehlike}" />
+                                    <Setter Property="BorderBrush" Value="{DynamicResource Tehlike}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+        </k:DiyalogGovdesi.Alt>
+        <StackPanel>
+            <TextBlock Text="{Binding Mesaj}" Style="{StaticResource Yazi.Ikincil}" FontSize="14" LineHeight="21" Margin="0,0,0,16" />
+            <ComboBox ItemsSource="{Binding Secenekler}" SelectedItem="{Binding Secili}" DisplayMemberPath="Ad" />
+        </StackPanel>
+    </k:DiyalogGovdesi>
+</UserControl>

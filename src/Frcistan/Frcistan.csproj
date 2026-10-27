@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>Frcistan</RootNamespace>
+    <AssemblyName>Frcistan</AssemblyName>
+    <ApplicationIcon>Assets\frcistan.ico</ApplicationIcon>
+
+    <Version>1.0.0</Version>
+    <Product>Frcistan</Product>
+    <Title>Frcistan - Robot Parçası Stok Yönetimi</Title>
+    <Company>İlyas Enes Sepetci</Company>
+    <Authors>İlyas Enes Sepetci</Authors>
+    <Copyright>© 2026 İlyas Enes Sepetci</Copyright>
+    <Description>FRC / FTC robot parçası bayileri için stok yönetim programı</Description>
+
+    <!-- Sadece Türkçe kaynak dosyaları kopyalansın -->
+    <SatelliteResourceLanguages>tr</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\logo-beyaz.png" />
+    <Resource Include="Assets\ikon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.13" />
+    <PackageReference Include="MySql.EntityFrameworkCore" Version="10.0.12" />
+  </ItemGroup>
+
+</Project>

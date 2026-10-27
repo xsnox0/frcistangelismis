@@ -1,0 +1,39 @@
+# ---- GİZLİ: lisans gizli anahtarı ve verilen lisans listesi asla yüklenmez ----
+araclar/LisansUretici/ozel-anahtar.txt
+araclar/LisansUretici/verilen-lisanslar.txt
+*.pem
+
+# ---- Eski sürüm kendi deposunda duruyor ----
+frcistan 0.1/
+
+# ---- Visual Studio / .NET derleme çıktıları ----
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.userprefs
+*.rsuser
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ll]og/
+TestResults/
+*.nupkg
+project.lock.json
+artifacts/
+
+# ---- Yayımlama ve kurulum çıktıları ----
+yayin/
+kurulum-cikti/
+
+# ---- Yerel veritabanı dosyaları ----
+*.db
+*.db-shm
+*.db-wal
+
+# ---- Ekran görüntüsü ve geçici dosyalar ----
+*.tmp
+Thumbs.db
+desktop.ini

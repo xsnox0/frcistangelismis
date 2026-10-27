@@ -1,0 +1,24 @@
+<UserControl x:Class="Frcistan.Diyaloglar.SifreDiyalogu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:a="clr-namespace:Frcistan.Altyapi"
+             xmlns:k="clr-namespace:Frcistan.Kontroller">
+    <k:DiyalogGovdesi Baslik="{Binding Baslik}" AltBaslik="Güvenliğiniz için en az 6 karakterli, tahmin edilmesi zor bir şifre seçin." Ikon="&#xE72E;"
+                      HataMetni="{Binding Hata}" Mesgul="{Binding Mesgul}">
+        <k:DiyalogGovdesi.Alt>
+            <StackPanel Orientation="Horizontal">
+                <Button Style="{StaticResource Dugme.Hayalet}" Content="Vazgeç" Command="{Binding IptalCommand}" Margin="0,0,8,0" Padding="16,0" />
+                <Button Style="{StaticResource Dugme.Birincil}" Content="Şifreyi değiştir" Command="{Binding KaydetCommand}" Padding="20,0" IsDefault="True" />
+            </StackPanel>
+        </k:DiyalogGovdesi.Alt>
+        <StackPanel>
+            <TextBlock Text="Mevcut şifre" Style="{StaticResource Yazi.Etiket}" />
+            <PasswordBox a:Ui.Sifre="{Binding Eski}" a:Ui.Ikon="&#xE72E;" a:Ui.IlkOdak="True" />
+            <TextBlock Text="Yeni şifre" Style="{StaticResource Yazi.Etiket}" Margin="0,16,0,7" />
+            <PasswordBox a:Ui.Sifre="{Binding Yeni}" a:Ui.Ikon="&#xE72E;" />
+            <k:SifreGucu Guc="{Binding Guc}" Margin="0,8,0,0" />
+            <TextBlock Text="Yeni şifre (tekrar)" Style="{StaticResource Yazi.Etiket}" Margin="0,16,0,7" />
+            <PasswordBox a:Ui.Sifre="{Binding Tekrar}" a:Ui.Ikon="&#xE72E;" />
+        </StackPanel>
+    </k:DiyalogGovdesi>
+</UserControl>

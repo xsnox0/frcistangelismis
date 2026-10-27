@@ -1,0 +1,54 @@
+<UserControl x:Class="Frcistan.Diyaloglar.LisansDiyalogu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:a="clr-namespace:Frcistan.Altyapi"
+             xmlns:k="clr-namespace:Frcistan.Kontroller">
+    <k:DiyalogGovdesi Baslik="{Binding Baslik}" Ikon="&#xEA18;" HataMetni="{Binding Hata}" Mesgul="{Binding Mesgul}">
+        <k:DiyalogGovdesi.Alt>
+            <StackPanel Orientation="Horizontal">
+                <Button Style="{StaticResource Dugme.Hayalet}" Content="Kapat" Command="{Binding IptalCommand}" Margin="0,0,8,0" Padding="16,0" />
+                <Button Style="{StaticResource Dugme.Birincil}" a:Ui.Ikon="&#xE8D7;" Content="Etkinleştir" Command="{Binding EtkinlestirCommand}" Padding="20,0"
+                        Visibility="{Binding YoneticiMi, Converter={StaticResource Gorunur}}" />
+            </StackPanel>
+        </k:DiyalogGovdesi.Alt>
+        <StackPanel>
+            <Border CornerRadius="12" Padding="16" Background="{DynamicResource Yuzey2}">
+                <StackPanel Orientation="Horizontal">
+                    <Border Width="40" Height="40" CornerRadius="20" Margin="0,0,14,0">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="{DynamicResource UyariYumusak}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Lisansli}" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource BasariYumusak}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <TextBlock Text="&#xEA18;" FontSize="16">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource Yazi.Ikon}">
+                                    <Setter Property="Foreground" Value="{DynamicResource UyariMetin}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Lisansli}" Value="True">
+                                            <Setter Property="Foreground" Value="{DynamicResource BasariMetin}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Mevcut.Baslik}" Style="{StaticResource Yazi.H3}" />
+                        <TextBlock Text="{Binding Mevcut.Aciklama}" Style="{StaticResource Yazi.Ikincil}" Margin="0,2,0,0" MaxWidth="420" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Text="Lisans anahtarı" Style="{StaticResource Yazi.Etiket}" Margin="0,20,0,7" />
+            <TextBox Style="{StaticResource Kutu.CokSatir}" Text="{Binding Anahtar, UpdateSourceTrigger=PropertyChanged}" a:Ui.Ipucu="FRC1.… ile başlayan anahtarı buraya yapıştırın"
+                     FontFamily="Cascadia Mono, Consolas" FontSize="12" MinHeight="96" a:Ui.IlkOdak="True" IsEnabled="{Binding YoneticiMi}" />
+            <TextBlock Text="Lisans anahtarı satın aldığınızda e-posta ile gönderilir. Lisansı yalnızca yönetici hesabı etkinleştirebilir." Style="{StaticResource Yazi.Kucuk}" Margin="0,8,0,0" TextWrapping="Wrap" />
+        </StackPanel>
+    </k:DiyalogGovdesi>
+</UserControl>

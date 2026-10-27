@@ -1,0 +1,121 @@
+<UserControl x:Class="Frcistan.Sayfalar.KategorilerSayfasi"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:a="clr-namespace:Frcistan.Altyapi">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Margin="0,0,0,16">
+            <TextBlock Text="Ürünlerinizi gruplandırın. Renk ve ikonlar listelerde ve grafiklerde kullanılır." Style="{StaticResource Yazi.Ikincil}" VerticalAlignment="Center" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button a:Ui.Ikon="&#xE896;" Content="Değerleme raporu" Command="{Binding ExcelCommand}" Background="{DynamicResource Yuzey}" Margin="0,0,8,0" />
+                <Button Style="{StaticResource Dugme.Birincil}" a:Ui.Ikon="&#xE710;" Content="Yeni kategori" Command="{Binding YeniCommand}"
+                        Visibility="{Binding Admin, Converter={StaticResource Gorunur}}" />
+            </StackPanel>
+        </Grid>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Focusable="False" Margin="0,0,-14,0">
+            <ItemsControl ItemsSource="{Binding Kartlar}" Focusable="False" Margin="0,0,0,0">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid VerticalAlignment="Top" Columns="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ScrollViewer}, Converter={StaticResource SutunSayisi}, ConverterParameter=300}" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Style="{StaticResource Kart}" Padding="0" Margin="0,0,16,16" ClipToBounds="False">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="4" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Border Background="{Binding Renk, Converter={StaticResource HexFirca}}" CornerRadius="13,13,0,0" />
+                                <StackPanel Grid.Row="1" Margin="20,18,16,16">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Border Width="44" Height="44" CornerRadius="12" Background="{Binding Renk, Converter={StaticResource HexFirca}, ConverterParameter=Yumusak}">
+                                            <TextBlock Text="{Binding Ikon, Converter={StaticResource IkonKodu}}" Style="{StaticResource Yazi.Ikon}" FontSize="19"
+                                                       Foreground="{Binding Renk, Converter={StaticResource HexFirca}}" />
+                                        </Border>
+                                        <StackPanel Grid.Column="1" Margin="14,0,0,0" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Ad}" Style="{StaticResource Yazi.H3}" TextTrimming="CharacterEllipsis" />
+                                            <TextBlock Style="{StaticResource Yazi.Kucuk}" Margin="0,2,0,0"><Run Text="{Binding UrunSayisi, Mode=OneWay}" /><Run Text=" ürün" /></TextBlock>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Top"
+                                                    Visibility="{Binding DataContext.Admin, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource Gorunur}}">
+                                            <Button Style="{StaticResource Dugme.Ikon}" a:Ui.Ikon="&#xE70F;" ToolTip="Düzenle"
+                                                    Command="{Binding DataContext.DuzenleCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" />
+                                            <Button Style="{StaticResource Dugme.IkonTehlike}" a:Ui.Ikon="&#xE74D;" ToolTip="Sil"
+                                                    Command="{Binding DataContext.SilCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" />
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid Margin="0,20,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel>
+                                            <TextBlock Text="Stok" Style="{StaticResource Yazi.Kucuk}" />
+                                            <TextBlock Text="{Binding ToplamAdet, Converter={StaticResource Sayi}}" FontSize="16" FontWeight="SemiBold" Margin="0,3,0,0" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Değer" Style="{StaticResource Yazi.Kucuk}" />
+                                            <TextBlock Text="{Binding StokDegeri, Converter={StaticResource Para}}" FontSize="16" FontWeight="SemiBold" Margin="0,3,0,0" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2">
+                                            <TextBlock Text="Kritik" Style="{StaticResource Yazi.Kucuk}" />
+                                            <TextBlock Text="{Binding KritikSayisi}" FontSize="16" FontWeight="SemiBold" Margin="0,3,0,0">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground" Value="{DynamicResource UyariMetin}" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding KritikSayisi}" Value="0">
+                                                                <Setter Property="Foreground" Value="{DynamicResource Metin3}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid Margin="0,16,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid x:Name="ray" Height="6" VerticalAlignment="Center">
+                                            <Border Background="{DynamicResource Yuzey3}" CornerRadius="3" />
+                                            <Border Background="{Binding Renk, Converter={StaticResource HexFirca}}" CornerRadius="3" HorizontalAlignment="Left">
+                                                <Border.Width>
+                                                    <MultiBinding Converter="{StaticResource OranGenislik}">
+                                                        <Binding Path="Pay" />
+                                                        <Binding Path="ActualWidth" ElementName="ray" />
+                                                    </MultiBinding>
+                                                </Border.Width>
+                                            </Border>
+                                        </Grid>
+                                        <TextBlock Grid.Column="1" Text="{Binding PayMetni}" Style="{StaticResource Yazi.Kucuk}" Margin="12,0,0,0" MinWidth="40" TextAlignment="Right" />
+                                    </Grid>
+
+                                    <Border Style="{StaticResource Ayirac}" Margin="0,16,0,10" />
+                                    <Button Style="{StaticResource Dugme.Baglanti}" Content="Ürünleri gör →" FontSize="12.5" HorizontalAlignment="Left"
+                                            Command="{Binding DataContext.UrunleriGorCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

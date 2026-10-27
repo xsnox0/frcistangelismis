@@ -1,0 +1,220 @@
+<UserControl x:Class="Frcistan.Sayfalar.HareketlerSayfasi"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:a="clr-namespace:Frcistan.Altyapi">
+    <UserControl.Resources>
+        <Style x:Key="OzetKarti" TargetType="Border" BasedOn="{StaticResource Kart}">
+            <Setter Property="Padding" Value="18,14" />
+            <Setter Property="Margin" Value="0,0,14,0" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Filtreler -->
+        <Grid Margin="0,0,0,14">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <WrapPanel VerticalAlignment="Center">
+                <TextBox Style="{StaticResource Kutu.Arama}" Width="240" Margin="0,0,10,0"
+                         Text="{Binding Arama, UpdateSourceTrigger=PropertyChanged, Delay=150}" a:Ui.Ipucu="Ürün, kullanıcı, açıklama…" />
+                <Border Style="{StaticResource SecimGrubu}" Background="{DynamicResource Yuzey}" Margin="0,0,10,0" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton Style="{StaticResource Secim}" GroupName="hTur" MinHeight="32" Content="Tümü" IsChecked="{Binding Tur, Converter={StaticResource EsitMi}, ConverterParameter=Tumu}" />
+                        <RadioButton Style="{StaticResource Secim}" GroupName="hTur" MinHeight="32" Content="Giriş" a:Ui.Ikon="&#xE896;" IsChecked="{Binding Tur, Converter={StaticResource EsitMi}, ConverterParameter=Giris}" />
+                        <RadioButton Style="{StaticResource Secim}" GroupName="hTur" MinHeight="32" Content="Çıkış" a:Ui.Ikon="&#xE898;" IsChecked="{Binding Tur, Converter={StaticResource EsitMi}, ConverterParameter=Cikis}" />
+                        <RadioButton Style="{StaticResource Secim}" GroupName="hTur" MinHeight="32" Content="Düzeltme" a:Ui.Ikon="&#xE895;" IsChecked="{Binding Tur, Converter={StaticResource EsitMi}, ConverterParameter=Duzeltme}" />
+                    </StackPanel>
+                </Border>
+                <ComboBox Width="150" SelectedValuePath="Tag" SelectedValue="{Binding Donem}" Background="{DynamicResource Yuzey}" VerticalAlignment="Center">
+                    <ComboBoxItem Content="Bugün" Tag="1" />
+                    <ComboBoxItem Content="Son 7 gün" Tag="7" />
+                    <ComboBoxItem Content="Son 30 gün" Tag="30" />
+                    <ComboBoxItem Content="Son 90 gün" Tag="90" />
+                    <ComboBoxItem Content="Son 1 yıl" Tag="365" />
+                    <ComboBoxItem Content="Tüm zamanlar" Tag="Tumu" />
+                </ComboBox>
+            </WrapPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+                <Button a:Ui.Ikon="&#xE896;" Command="{Binding ExcelCommand}" Background="{DynamicResource Yuzey}" Margin="0,0,8,0" Width="40" Padding="0" ToolTip="Excel'e aktar" />
+                <Button a:Ui.Ikon="&#xE749;" Command="{Binding YazdirCommand}" Background="{DynamicResource Yuzey}" Margin="0,0,8,0" Width="40" Padding="0" ToolTip="Yazdır / PDF" />
+                <Button a:Ui.Ikon="&#xE710;" Content="Stok girişi" Command="{Binding GirisCommand}" Background="{DynamicResource Yuzey}" Margin="0,0,8,0" />
+                <Button Style="{StaticResource Dugme.Birincil}" a:Ui.Ikon="&#xE7BF;" Content="Satış yap" Command="{Binding SatisCommand}" />
+            </StackPanel>
+        </Grid>
+
+        <!-- Özet -->
+        <Grid Grid.Row="1" Margin="0,0,-14,14">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Border Style="{StaticResource OzetKarti}">
+                <StackPanel Orientation="Horizontal">
+                    <Border Style="{StaticResource IkonKutusu}" Background="{DynamicResource BasariYumusak}" Margin="0,0,14,0">
+                        <TextBlock Text="&#xE896;" Style="{StaticResource Yazi.Ikon}" Foreground="{DynamicResource BasariMetin}" />
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Style="{StaticResource Yazi.Kucuk}" Text="Toplam giriş" />
+                        <TextBlock FontSize="18" FontWeight="SemiBold" Margin="0,2,0,0"><Run Text="{Binding GirisAdet, Mode=OneWay}" /><Run Text=" adet" FontSize="13" Foreground="{DynamicResource Metin3}" FontWeight="Normal" /></TextBlock>
+                        <TextBlock Text="{Binding GirisTutar}" Style="{StaticResource Yazi.Kucuk}" Foreground="{DynamicResource Metin2}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="1" Style="{StaticResource OzetKarti}">
+                <StackPanel Orientation="Horizontal">
+                    <Border Style="{StaticResource IkonKutusu}" Background="{DynamicResource TehlikeYumusak}" Margin="0,0,14,0">
+                        <TextBlock Text="&#xE898;" Style="{StaticResource Yazi.Ikon}" Foreground="{DynamicResource TehlikeMetin}" />
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Style="{StaticResource Yazi.Kucuk}" Text="Toplam çıkış (satış)" />
+                        <TextBlock FontSize="18" FontWeight="SemiBold" Margin="0,2,0,0"><Run Text="{Binding CikisAdet, Mode=OneWay}" /><Run Text=" adet" FontSize="13" Foreground="{DynamicResource Metin3}" FontWeight="Normal" /></TextBlock>
+                        <TextBlock Text="{Binding CikisTutar}" Style="{StaticResource Yazi.Kucuk}" Foreground="{DynamicResource Metin2}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="2" Style="{StaticResource OzetKarti}">
+                <StackPanel Orientation="Horizontal">
+                    <Border Style="{StaticResource IkonKutusu}" Background="{DynamicResource UyariYumusak}" Margin="0,0,14,0">
+                        <TextBlock Text="&#xE895;" Style="{StaticResource Yazi.Ikon}" Foreground="{DynamicResource UyariMetin}" />
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Style="{StaticResource Yazi.Kucuk}" Text="Sayım düzeltmesi" />
+                        <TextBlock FontSize="18" FontWeight="SemiBold" Margin="0,2,0,0" Text="{Binding DuzeltmeAdet}" />
+                        <TextBlock Text="hareket" Style="{StaticResource Yazi.Kucuk}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="3" Style="{StaticResource OzetKarti}">
+                <StackPanel Orientation="Horizontal">
+                    <Border Style="{StaticResource IkonKutusu}" Margin="0,0,14,0">
+                        <TextBlock Text="&#xE8AB;" Style="{StaticResource Yazi.Ikon}" Foreground="{DynamicResource VurguMetin}" />
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Style="{StaticResource Yazi.Kucuk}" Text="Toplam hareket" />
+                        <TextBlock FontSize="18" FontWeight="SemiBold" Margin="0,2,0,0" Text="{Binding HareketSayisi}" />
+                        <TextBlock Text="listelenen" Style="{StaticResource Yazi.Kucuk}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- Tablo -->
+        <Border Grid.Row="2" Style="{StaticResource Kart}" Padding="0">
+            <Grid>
+                <DataGrid Style="{StaticResource Tablo}" ItemsSource="{Binding Gorunum}" Margin="4,4,4,0" MouseDoubleClick="Tablo_MouseDoubleClick">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Tarih" SortMemberPath="Tarih" Width="0.9*" MinWidth="104">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding TarihMetni}" />
+                                        <TextBlock Text="{Binding SaatMetni}" Style="{StaticResource Yazi.Kucuk}" Margin="0,1,0,0" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Tür" SortMemberPath="TurMetni" Width="0.95*" MinWidth="112">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource TurRozeti}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding TurIkon}" FontFamily="{StaticResource IkonYazi}" FontSize="11" Margin="0,1,6,0" VerticalAlignment="Center" />
+                                            <TextBlock Text="{Binding TurMetni}" Style="{StaticResource Rozet.Yazi}" />
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Ürün" SortMemberPath="UrunAdi" Width="2.4*" MinWidth="220">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding UrunAdi}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Style="{StaticResource Yazi.Kucuk}" Margin="0,2,0,0" TextTrimming="CharacterEllipsis">
+                                            <Run Text="{Binding Marka, Mode=OneWay}" /><Run Text="  ·  " /><Run Text="{Binding Kod, Mode=OneWay}" />
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Miktar" SortMemberPath="Miktar" Width="0.7*" MinWidth="76" HeaderStyle="{StaticResource Tablo.BaslikSag}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding MiktarMetni}" FontWeight="SemiBold" FontSize="14" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="{DynamicResource TehlikeMetin}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Artis}" Value="True">
+                                                        <Setter Property="Foreground" Value="{DynamicResource BasariMetin}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Stok" Binding="{Binding StokGecisi}" Width="0.85*" MinWidth="90" CanUserSort="False" HeaderStyle="{StaticResource Tablo.BaslikSag}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource Tablo.Sayi}">
+                                    <Setter Property="Foreground" Value="{DynamicResource Metin2}" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Birim fiyat" Binding="{Binding BirimFiyat, Converter={StaticResource Para}}" SortMemberPath="BirimFiyat" Width="0.9*" MinWidth="92"
+                                            HeaderStyle="{StaticResource Tablo.BaslikSag}" ElementStyle="{StaticResource Tablo.Sayi}" />
+                        <DataGridTemplateColumn Header="Tutar" SortMemberPath="Tutar" Width="0.95*" MinWidth="100" HeaderStyle="{StaticResource Tablo.BaslikSag}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Tutar, Converter={StaticResource Para}}" FontWeight="SemiBold" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Kullanıcı" SortMemberPath="KullaniciAdi" Width="1.35*" MinWidth="150">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Width="26" Height="26" CornerRadius="13" Background="{DynamicResource VurguYumusak}" Margin="0,0,9,0">
+                                            <TextBlock Text="{Binding KullaniciAdi, Converter={StaticResource BasHarf}}" FontFamily="Segoe UI" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource VurguMetin}"
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Border>
+                                        <TextBlock Text="{Binding KullaniciAdi}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource Metin2}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Açıklama" Binding="{Binding Aciklama}" Width="1.4*" MinWidth="130">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{DynamicResource Metin2}" />
+                                    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                                    <Setter Property="ToolTip" Value="{Binding Aciklama}" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <StackPanel Style="{StaticResource BosDurum}" Visibility="{Binding BosMu, Converter={StaticResource Gorunur}}">
+                    <Border Width="64" Height="64" CornerRadius="18" Background="{DynamicResource Yuzey3}" HorizontalAlignment="Center">
+                        <TextBlock Text="&#xE8AB;" Style="{StaticResource Yazi.Ikon}" FontSize="24" Foreground="{DynamicResource Metin3}" />
+                    </Border>
+                    <TextBlock Text="Bu dönemde hareket yok" Style="{StaticResource Yazi.H2}" HorizontalAlignment="Center" Margin="0,18,0,6" />
+                    <TextBlock Text="Farklı bir dönem seçin ya da yeni bir stok hareketi kaydedin." Style="{StaticResource Yazi.Ikincil}" HorizontalAlignment="Center" />
+                </StackPanel>
+                <ContentControl Style="{StaticResource Donen}" Width="30" Height="30" Visibility="{Binding Yukleniyor, Converter={StaticResource Gorunur}}" />
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

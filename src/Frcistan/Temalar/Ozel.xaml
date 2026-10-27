@@ -1,0 +1,215 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:a="clr-namespace:Frcistan.Altyapi"
+                    xmlns:k="clr-namespace:Frcistan.Kontroller">
+
+    <!-- ===================================================================
+         DİYALOG GÖVDESİ
+         =================================================================== -->
+    <Style TargetType="k:DiyalogGovdesi">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="KeyboardNavigation.TabNavigation" Value="Cycle" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="k:DiyalogGovdesi">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Grid Margin="24,22,16,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Border x:Name="ikonKutu" Style="{StaticResource IkonKutusu}" Margin="0,0,14,0" VerticalAlignment="Top">
+                                <TextBlock Text="{TemplateBinding Ikon}" Style="{StaticResource Yazi.Ikon}" FontSize="17" Foreground="{DynamicResource VurguMetin}" />
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="{TemplateBinding Baslik}" Style="{StaticResource Yazi.H2}" TextWrapping="Wrap" />
+                                <TextBlock x:Name="alt" Text="{TemplateBinding AltBaslik}" Style="{StaticResource Yazi.Ikincil}" Margin="0,3,0,0" />
+                            </StackPanel>
+                            <Button Grid.Column="2" Style="{StaticResource Dugme.Ikon}" a:Ui.Ikon="&#xE8BB;" FontSize="10.5"
+                                    VerticalAlignment="Top" Margin="8,-4,0,0" Command="{Binding IptalCommand}" ToolTip="Kapat (Esc)" IsTabStop="False" />
+                        </Grid>
+
+                        <ScrollViewer x:Name="kaydirma" Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Focusable="False">
+                            <ContentPresenter Margin="24,14,24,4" />
+                        </ScrollViewer>
+
+                        <Border Grid.Row="2" Margin="24,10,24,0" Background="{DynamicResource TehlikeYumusak}" CornerRadius="9" Padding="12,10"
+                                Visibility="{Binding HataMetni, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource DoluGorunur}}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="&#xE783;" FontFamily="{StaticResource IkonYazi}" FontSize="14" Foreground="{DynamicResource TehlikeMetin}" Margin="0,1,10,0" VerticalAlignment="Top" />
+                                <TextBlock Grid.Column="1" Text="{TemplateBinding HataMetni}" TextWrapping="Wrap" Foreground="{DynamicResource TehlikeMetin}" FontSize="13" />
+                            </Grid>
+                        </Border>
+
+                        <Border x:Name="altCubuk" Grid.Row="3" Margin="0,20,0,0" Padding="24,16" BorderBrush="{DynamicResource Cizgi}"
+                                BorderThickness="0,1,0,0" Background="{DynamicResource Yuzey2}" CornerRadius="0,0,15,15">
+                            <Grid>
+                                <ContentControl Style="{StaticResource Donen}" HorizontalAlignment="Left"
+                                                Visibility="{TemplateBinding Mesgul, Converter={StaticResource Gorunur}}" />
+                                <ContentPresenter Content="{TemplateBinding Alt}" HorizontalAlignment="Right" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Ikon" Value="{x:Null}">
+                            <Setter TargetName="ikonKutu" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="AltBaslik" Value="{x:Null}">
+                            <Setter TargetName="alt" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="Alt" Value="{x:Null}">
+                            <Setter TargetName="altCubuk" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="Kaydirma" Value="False">
+                            <Setter TargetName="kaydirma" Property="VerticalScrollBarVisibility" Value="Disabled" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ===================================================================
+         KENAR MENÜSÜ
+         =================================================================== -->
+    <Style x:Key="KenarMenusu" TargetType="ListBox">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBox">
+                    <ItemsPresenter />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="Cursor" Value="Hand" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Grid Margin="0,2">
+                                    <Border x:Name="cubuk" Width="3" Height="20" CornerRadius="0,3,3,0" Background="{DynamicResource Vurgu}"
+                                            HorizontalAlignment="Left" Margin="-14,0,0,0" Visibility="Collapsed" />
+                                    <Border x:Name="kok" Height="42" CornerRadius="10" Background="Transparent">
+                                        <Grid Margin="13,0,10,0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="30" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock x:Name="ikon" Text="{Binding Ikon}" FontFamily="{StaticResource IkonYazi}" FontSize="15"
+                                                       Foreground="{DynamicResource Kenar.Metin2}" VerticalAlignment="Center" />
+                                            <TextBlock x:Name="ad" Grid.Column="1" Text="{Binding Baslik}" FontSize="13.5" FontWeight="SemiBold"
+                                                       Foreground="{DynamicResource Kenar.Metin2}" VerticalAlignment="Center" />
+                                            <Border Grid.Column="2" CornerRadius="9" Background="#33EF4444" Padding="7,1,7,2" VerticalAlignment="Center"
+                                                    Visibility="{Binding Rozet, Converter={StaticResource DoluGorunur}}">
+                                                <TextBlock Text="{Binding Rozet}" FontSize="11" FontWeight="Bold" Foreground="#FCA5A5" />
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="kok" Property="Background" Value="{DynamicResource Kenar.Hover}" />
+                                        <Setter TargetName="ikon" Property="Foreground" Value="{DynamicResource Kenar.Metin}" />
+                                        <Setter TargetName="ad" Property="Foreground" Value="{DynamicResource Kenar.Metin}" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="kok" Property="Background">
+                                            <Setter.Value>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                    <GradientStop Color="#383D7EFF" Offset="0" />
+                                                    <GradientStop Color="#0F3D7EFF" Offset="1" />
+                                                </LinearGradientBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter TargetName="ikon" Property="Foreground" Value="#8DB4FF" />
+                                        <Setter TargetName="ad" Property="Foreground" Value="White" />
+                                        <Setter TargetName="cubuk" Property="Visibility" Value="Visible" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Kenar çubuğundaki küçük düğme -->
+    <Style x:Key="Dugme.Kenar" TargetType="Button" BasedOn="{StaticResource Dugme.Ikon}">
+        <Setter Property="Foreground" Value="{DynamicResource Kenar.Metin2}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource Kenar.Hover}" />
+                <Setter Property="Foreground" Value="{DynamicResource Kenar.Metin}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- ===================================================================
+         İSTATİSTİK KARTI ve SAYFA ARAÇ ÇUBUĞU
+         =================================================================== -->
+    <Style x:Key="AracCubugu" TargetType="Border">
+        <Setter Property="Background" Value="{DynamicResource Yuzey}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Cizgi}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="14,14,0,0" />
+        <Setter Property="Padding" Value="16,14" />
+    </Style>
+
+    <!-- Durum rozeti: Yeterli / Kritik / Tükendi -->
+    <Style x:Key="DurumRozeti" TargetType="Border" BasedOn="{StaticResource Rozet}">
+        <Setter Property="Background" Value="{DynamicResource BasariYumusak}" />
+        <Setter Property="TextElement.Foreground" Value="{DynamicResource BasariMetin}" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Durum}" Value="Kritik">
+                <Setter Property="Background" Value="{DynamicResource UyariYumusak}" />
+                <Setter Property="TextElement.Foreground" Value="{DynamicResource UyariMetin}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Durum}" Value="Tukendi">
+                <Setter Property="Background" Value="{DynamicResource TehlikeYumusak}" />
+                <Setter Property="TextElement.Foreground" Value="{DynamicResource TehlikeMetin}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Hareket türü rozeti -->
+    <Style x:Key="TurRozeti" TargetType="Border" BasedOn="{StaticResource Rozet}">
+        <Setter Property="Background" Value="{DynamicResource BasariYumusak}" />
+        <Setter Property="TextElement.Foreground" Value="{DynamicResource BasariMetin}" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Tur}" Value="Cikis">
+                <Setter Property="Background" Value="{DynamicResource TehlikeYumusak}" />
+                <Setter Property="TextElement.Foreground" Value="{DynamicResource TehlikeMetin}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Tur}" Value="Duzeltme">
+                <Setter Property="Background" Value="{DynamicResource UyariYumusak}" />
+                <Setter Property="TextElement.Foreground" Value="{DynamicResource UyariMetin}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Boş liste görünümü -->
+    <Style x:Key="BosDurum" TargetType="StackPanel">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0,40" />
+    </Style>
+</ResourceDictionary>

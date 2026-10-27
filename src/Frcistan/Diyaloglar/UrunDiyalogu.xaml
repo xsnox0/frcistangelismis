@@ -1,0 +1,129 @@
+<UserControl x:Class="Frcistan.Diyaloglar.UrunDiyalogu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:a="clr-namespace:Frcistan.Altyapi"
+             xmlns:k="clr-namespace:Frcistan.Kontroller">
+    <k:DiyalogGovdesi Baslik="{Binding Baslik}" AltBaslik="{Binding AltBaslikMetni}" Ikon="&#xE7B8;" HataMetni="{Binding Hata}" Mesgul="{Binding Mesgul}">
+        <k:DiyalogGovdesi.Alt>
+            <StackPanel Orientation="Horizontal">
+                <Button Style="{StaticResource Dugme.Hayalet}" Content="Vazgeç" Command="{Binding IptalCommand}" Margin="0,0,8,0" Padding="16,0" />
+                <Button Content="Kaydet ve yeni ekle" Command="{Binding KaydetVeYeniCommand}" Margin="0,0,8,0"
+                        Visibility="{Binding YeniMi, Converter={StaticResource Gorunur}}" ToolTip="Kaydeder, kategori ve markayı koruyarak formu temizler" />
+                <Button Style="{StaticResource Dugme.Birincil}" a:Ui.Ikon="&#xE74E;" Content="Kaydet" Command="{Binding KaydetCommand}" Padding="20,0" IsDefault="True" />
+            </StackPanel>
+        </k:DiyalogGovdesi.Alt>
+
+        <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="14" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.ColumnSpan="3">
+                    <TextBlock Text="Ürün adı *" Style="{StaticResource Yazi.Etiket}" />
+                    <TextBox Text="{Binding UrunAdi, UpdateSourceTrigger=PropertyChanged}" a:Ui.Ipucu="ör. Kraken X60 Brushless Motor" a:Ui.IlkOdak="True" MaxLength="150"
+                             a:Ui.HataVar="{Binding UrunAdiHatasi, Converter={StaticResource DoluMu}}" />
+                    <TextBlock Text="{Binding UrunAdiHatasi}" Style="{StaticResource Yazi.Hata}" />
+                </StackPanel>
+            </Grid>
+
+            <Grid Margin="0,16,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="14" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="Marka *" Style="{StaticResource Yazi.Etiket}" />
+                    <ComboBox IsEditable="True" ItemsSource="{Binding Markalar}" Text="{Binding Marka, UpdateSourceTrigger=PropertyChanged}" a:Ui.Ipucu="Seçin ya da yazın"
+                              a:Ui.HataVar="{Binding MarkaHatasi, Converter={StaticResource DoluMu}}" IsTextSearchEnabled="True" StaysOpenOnEdit="True" />
+                    <TextBlock Text="{Binding MarkaHatasi}" Style="{StaticResource Yazi.Hata}" />
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Kategori *" Style="{StaticResource Yazi.Etiket}" />
+                    <ComboBox ItemsSource="{Binding Kategoriler}" SelectedValuePath="Id" SelectedValue="{Binding KategoriId}" a:Ui.Ipucu="Kategori seçin"
+                              a:Ui.HataVar="{Binding KategoriHatasi, Converter={StaticResource DoluMu}}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Ikon, Converter={StaticResource IkonKodu}}" FontFamily="{StaticResource IkonYazi}" FontSize="13"
+                                               Foreground="{Binding Renk, Converter={StaticResource HexFirca}}" Margin="0,1,10,0" VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding Ad}" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <TextBlock Text="{Binding KategoriHatasi}" Style="{StaticResource Yazi.Hata}" />
+                </StackPanel>
+            </Grid>
+
+            <Grid Margin="0,16,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="14" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="Ürün kodu" Style="{StaticResource Yazi.Etiket}" />
+                    <TextBox Text="{Binding Kod, UpdateSourceTrigger=PropertyChanged}" a:Ui.Ipucu="{Binding KodIpucu}" a:Ui.Ikon="&#xE8EC;" MaxLength="30"
+                             a:Ui.HataVar="{Binding KodHatasi, Converter={StaticResource DoluMu}}" />
+                    <TextBlock Text="{Binding KodHatasi}" Style="{StaticResource Yazi.Hata}" />
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Raf / konum" Style="{StaticResource Yazi.Etiket}" />
+                    <TextBox Text="{Binding Konum, UpdateSourceTrigger=PropertyChanged}" a:Ui.Ipucu="ör. A-03" a:Ui.Ikon="&#xE707;" MaxLength="40" />
+                </StackPanel>
+            </Grid>
+
+            <Border Style="{StaticResource Ayirac}" Margin="0,22,0,18" />
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="14" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="14" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="14" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource Yazi.Etiket}"><Run Text="Alış fiyatı (" /><Run Text="{Binding ParaSembolu, Mode=OneWay}" /><Run Text=")" /></TextBlock>
+                    <TextBox Text="{Binding AlisMetni, UpdateSourceTrigger=PropertyChanged}" a:Ui.Sayi="Ondalik" a:Ui.Ipucu="0,00" MaxLength="12"
+                             a:Ui.HataVar="{Binding FiyatHatasi, Converter={StaticResource DoluMu}}" />
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Style="{StaticResource Yazi.Etiket}"><Run Text="Satış fiyatı (" /><Run Text="{Binding ParaSembolu, Mode=OneWay}" /><Run Text=")" /></TextBlock>
+                    <TextBox Text="{Binding SatisMetni, UpdateSourceTrigger=PropertyChanged}" a:Ui.Sayi="Ondalik" a:Ui.Ipucu="0,00" MaxLength="12"
+                             a:Ui.HataVar="{Binding FiyatHatasi, Converter={StaticResource DoluMu}}" />
+                </StackPanel>
+                <StackPanel Grid.Column="4">
+                    <TextBlock Text="{Binding AdetEtiketi}" Style="{StaticResource Yazi.Etiket}" />
+                    <TextBox Text="{Binding AdetMetni, UpdateSourceTrigger=PropertyChanged}" a:Ui.Sayi="Tam" MaxLength="7"
+                             a:Ui.HataVar="{Binding AdetHatasi, Converter={StaticResource DoluMu}}" />
+                </StackPanel>
+                <StackPanel Grid.Column="6">
+                    <TextBlock Text="Kritik seviye" Style="{StaticResource Yazi.Etiket}" />
+                    <TextBox Text="{Binding MinStokMetni, UpdateSourceTrigger=PropertyChanged}" a:Ui.Sayi="Tam" MaxLength="6" ToolTip="Stok bu sayıya ya da altına düşünce uyarı verilir" />
+                </StackPanel>
+            </Grid>
+            <TextBlock Text="{Binding FiyatHatasi}" Style="{StaticResource Yazi.Hata}" />
+            <TextBlock Text="{Binding AdetHatasi}" Style="{StaticResource Yazi.Hata}" />
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" Visibility="{Binding MarjMetni, Converter={StaticResource DoluGorunur}}">
+                <TextBlock Text="&#xE8EF;" FontFamily="{StaticResource IkonYazi}" FontSize="12" Foreground="{DynamicResource BasariMetin}" Margin="0,1,8,0" />
+                <TextBlock Text="{Binding MarjMetni}" FontSize="12.5" Foreground="{DynamicResource BasariMetin}" />
+            </StackPanel>
+            <Border Background="{DynamicResource UyariYumusak}" CornerRadius="9" Padding="12,9" Margin="0,12,0,0"
+                    Visibility="{Binding AdetDegisti, Converter={StaticResource Gorunur}}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#xE946;" FontFamily="{StaticResource IkonYazi}" FontSize="13" Foreground="{DynamicResource UyariMetin}" Margin="0,1,9,0" />
+                    <TextBlock Text="Stok değişikliği, kim ve ne zaman yaptığıyla birlikte “düzeltme” hareketi olarak kaydedilecek." Foreground="{DynamicResource UyariMetin}" FontSize="12.5" TextWrapping="Wrap" MaxWidth="520" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Text="Açıklama / not" Style="{StaticResource Yazi.Etiket}" Margin="0,18,0,7" />
+            <TextBox Style="{StaticResource Kutu.CokSatir}" Text="{Binding Aciklama, UpdateSourceTrigger=PropertyChanged}" a:Ui.Ipucu="Teknik özellik, tedarikçi, uyumluluk notu…" MaxLength="500" MinHeight="66" />
+        </StackPanel>
+    </k:DiyalogGovdesi>
+</UserControl>

@@ -1,0 +1,32 @@
+<UserControl x:Class="Frcistan.Diyaloglar.MesajDiyalogu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StackPanel>
+        <StackPanel Margin="28,28,28,8">
+            <Border Width="52" Height="52" CornerRadius="26" HorizontalAlignment="Left"
+                    Background="{Binding Renk, Converter={StaticResource KaynakFirca}, ConverterParameter=Yumusak}">
+                <TextBlock Text="{Binding Ikon}" Style="{StaticResource Yazi.Ikon}" FontSize="21"
+                           Foreground="{Binding Renk, Converter={StaticResource KaynakFirca}, ConverterParameter=Metin}" />
+            </Border>
+            <TextBlock Text="{Binding Baslik}" Style="{StaticResource Yazi.H2}" Margin="0,18,0,8" TextWrapping="Wrap" />
+            <TextBlock Text="{Binding Mesaj}" Style="{StaticResource Yazi.Ikincil}" FontSize="14" LineHeight="21" />
+            <TextBlock Text="{Binding Ayrinti}" Style="{StaticResource Yazi.Kucuk}" Margin="0,10,0,0" Visibility="{Binding Ayrinti, Converter={StaticResource DoluGorunur}}" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="28,20,28,24">
+            <Button Style="{StaticResource Dugme.Hayalet}" Content="{Binding IptalMetni}" Command="{Binding IptalCommand}" Margin="0,0,8,0" Padding="18,0"
+                    Visibility="{Binding IptalMetni, Converter={StaticResource DoluGorunur}}" />
+            <Button Content="{Binding OnayMetni}" Command="{Binding OnayCommand}" Padding="22,0" IsDefault="True" x:Name="onay">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource Dugme.Birincil}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Tehlikeli}" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource Tehlike}" />
+                                <Setter Property="BorderBrush" Value="{DynamicResource Tehlike}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

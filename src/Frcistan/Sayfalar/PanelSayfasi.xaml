@@ -1,0 +1,336 @@
+<UserControl x:Class="Frcistan.Sayfalar.PanelSayfasi"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:a="clr-namespace:Frcistan.Altyapi"
+             xmlns:k="clr-namespace:Frcistan.Kontroller">
+    <UserControl.Resources>
+        <Style x:Key="KpiKarti" TargetType="Border" BasedOn="{StaticResource Kart}">
+            <Setter Property="Padding" Value="20,18" />
+            <Setter Property="Margin" Value="0,0,16,0" />
+        </Style>
+        <Style x:Key="KartBasligi" TargetType="TextBlock" BasedOn="{StaticResource Yazi.H3}" />
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Focusable="False" Margin="0,0,-14,0">
+        <StackPanel Margin="0,0,14,0">
+
+            <!-- Selamlama ve hızlı işlemler -->
+            <Grid Margin="0,0,0,18">
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Selamlama}" Style="{StaticResource Yazi.H2}" FontSize="17" />
+                    <TextBlock Text="Stoğunuzun bugünkü durumu" Style="{StaticResource Yazi.Kucuk}" Margin="0,2,0,0" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Border Style="{StaticResource SecimGrubu}" Margin="0,0,12,0" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Style="{StaticResource Secim}" GroupName="panelDonem" Content="7 gün" IsChecked="{Binding Donem, Converter={StaticResource EsitMi}, ConverterParameter=7}" />
+                            <RadioButton Style="{StaticResource Secim}" GroupName="panelDonem" Content="30 gün" IsChecked="{Binding Donem, Converter={StaticResource EsitMi}, ConverterParameter=30}" />
+                            <RadioButton Style="{StaticResource Secim}" GroupName="panelDonem" Content="90 gün" IsChecked="{Binding Donem, Converter={StaticResource EsitMi}, ConverterParameter=90}" />
+                        </StackPanel>
+                    </Border>
+                    <Button a:Ui.Ikon="&#xE896;" Content="Stok girişi" Command="{Binding GirisCommand}" Margin="0,0,8,0" />
+                    <Button a:Ui.Ikon="&#xE710;" Content="Yeni ürün" Command="{Binding YeniUrunCommand}" Margin="0,0,8,0"
+                            Visibility="{Binding Admin, Converter={StaticResource Gorunur}}" />
+                    <Button Style="{StaticResource Dugme.Birincil}" a:Ui.Ikon="&#xE7BF;" Content="Satış yap" Command="{Binding SatisCommand}" />
+                </StackPanel>
+            </Grid>
+
+            <!-- Özet kartlar -->
+            <Grid Margin="0,0,-16,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Style="{StaticResource KpiKarti}">
+                    <Grid>
+                        <StackPanel>
+                            <TextBlock Text="Stok değeri" Style="{StaticResource Yazi.Ikincil}" />
+                            <TextBlock Text="{Binding StokDegeri}" Style="{StaticResource Yazi.KPI}" Margin="0,8,0,6" />
+                            <TextBlock Style="{StaticResource Yazi.Kucuk}" TextTrimming="CharacterEllipsis">
+                                <Run Text="Satış değeri" /> <Run Text="{Binding SatisDegeri, Mode=OneWay}" Foreground="{DynamicResource Metin2}" />
+                            </TextBlock>
+                        </StackPanel>
+                        <Border Style="{StaticResource IkonKutusu}" HorizontalAlignment="Right" VerticalAlignment="Top">
+                            <TextBlock Text="&#xE8C7;" Style="{StaticResource Yazi.Ikon}" Foreground="{DynamicResource VurguMetin}" />
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource KpiKarti}">
+                    <Grid>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource Yazi.Ikincil}"><Run Text="Satışlar ·" /> <Run Text="{Binding DonemMetni, Mode=OneWay}" /></TextBlock>
+                            <TextBlock Text="{Binding DonemSatis}" Style="{StaticResource Yazi.KPI}" Margin="0,8,0,6" />
+                            <StackPanel Orientation="Horizontal">
+                                <Border CornerRadius="6" Padding="6,1,6,2" Margin="0,0,8,0" Visibility="{Binding DonemDegisimVar, Converter={StaticResource Gorunur}}">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="{DynamicResource TehlikeYumusak}" />
+                                            <Setter Property="TextElement.Foreground" Value="{DynamicResource TehlikeMetin}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding DonemArtis}" Value="True">
+                                                    <Setter Property="Background" Value="{DynamicResource BasariYumusak}" />
+                                                    <Setter Property="TextElement.Foreground" Value="{DynamicResource BasariMetin}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock Text="{Binding DonemDegisim}" FontSize="11.5" FontWeight="SemiBold" />
+                                </Border>
+                                <TextBlock Style="{StaticResource Yazi.Kucuk}" VerticalAlignment="Center"><Run Text="{Binding DonemSatisAdet, Mode=OneWay, Converter={StaticResource Sayi}}" /> <Run Text="adet satıldı" /></TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                        <Border Style="{StaticResource IkonKutusu}" Background="{DynamicResource BasariYumusak}" HorizontalAlignment="Right" VerticalAlignment="Top">
+                            <TextBlock Text="&#xE7BF;" Style="{StaticResource Yazi.Ikon}" Foreground="{DynamicResource BasariMetin}" />
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Column="2" Style="{StaticResource KpiKarti}">
+                    <Grid>
+                        <StackPanel>
+                            <TextBlock Text="Ürün çeşidi" Style="{StaticResource Yazi.Ikincil}" />
+                            <TextBlock Text="{Binding UrunCesidi, Converter={StaticResource Sayi}}" Style="{StaticResource Yazi.KPI}" Margin="0,8,0,6" />
+                            <TextBlock Style="{StaticResource Yazi.Kucuk}"><Run Text="{Binding ToplamAdet, Mode=OneWay, Converter={StaticResource Sayi}}" Foreground="{DynamicResource Metin2}" /> <Run Text="adet stokta" /></TextBlock>
+                        </StackPanel>
+                        <Border Style="{StaticResource IkonKutusu}" Background="#248B5CF6" HorizontalAlignment="Right" VerticalAlignment="Top">
+                            <TextBlock Text="&#xE7B8;" Style="{StaticResource Yazi.Ikon}" Foreground="#A78BFA" />
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <Button Grid.Column="3" Command="{Binding KritikleriGorCommand}" Cursor="Hand" Margin="0,0,16,0" FocusVisualStyle="{StaticResource OdakYok}">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="kart" Style="{StaticResource Kart}" Padding="20,18">
+                                <Grid>
+                                    <StackPanel>
+                                        <TextBlock Text="Kritik stok" Style="{StaticResource Yazi.Ikincil}" />
+                                        <TextBlock Style="{StaticResource Yazi.KPI}" Margin="0,8,0,6">
+                                            <Run Text="{Binding KritikSayisi, Mode=OneWay}" /><Run Text=" ürün" FontSize="16" Foreground="{DynamicResource Metin3}" />
+                                        </TextBlock>
+                                        <TextBlock Style="{StaticResource Yazi.Kucuk}">
+                                            <Run Text="{Binding TukenenSayisi, Mode=OneWay}" Foreground="{DynamicResource TehlikeMetin}" FontWeight="SemiBold" /> <Run Text="ürün tükendi · Görüntüle →" />
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <Border Style="{StaticResource IkonKutusu}" Background="{DynamicResource UyariYumusak}" HorizontalAlignment="Right" VerticalAlignment="Top">
+                                        <TextBlock Text="&#xE7BA;" Style="{StaticResource Yazi.Ikon}" Foreground="{DynamicResource UyariMetin}" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="kart" Property="BorderBrush" Value="{DynamicResource Uyari}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+
+            <!-- Grafikler -->
+            <Grid Margin="0,0,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.85*" />
+                    <ColumnDefinition Width="16" />
+                    <ColumnDefinition Width="*" MinWidth="320" />
+                </Grid.ColumnDefinitions>
+
+                <Border Style="{StaticResource Kart}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="270" />
+                        </Grid.RowDefinitions>
+                        <Grid Margin="0,0,0,14">
+                            <StackPanel>
+                                <TextBlock Text="Stok hareketleri" Style="{StaticResource KartBasligi}" />
+                                <TextBlock Style="{StaticResource Yazi.Kucuk}" Margin="0,2,0,0"><Run Text="Günlük giriş ve çıkış adetleri ·" /> <Run Text="{Binding DonemMetni, Mode=OneWay}" /></TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                                <Ellipse Width="9" Height="9" Fill="{DynamicResource Vurgu}" VerticalAlignment="Center" />
+                                <TextBlock Text="Giriş" Style="{StaticResource Yazi.Ikincil}" Margin="7,0,16,0" VerticalAlignment="Center" />
+                                <Ellipse Width="9" Height="9" Fill="#F59E0B" VerticalAlignment="Center" />
+                                <TextBlock Text="Çıkış" Style="{StaticResource Yazi.Ikincil}" Margin="7,0,10,0" VerticalAlignment="Center" />
+                                <Button Style="{StaticResource Dugme.Baglanti}" Content="Tümü →" FontSize="12.5" Margin="8,0,0,0" VerticalAlignment="Center" Command="{Binding HareketleriGorCommand}" />
+                            </StackPanel>
+                        </Grid>
+                        <k:AlanGrafik Grid.Row="1" Seriler="{Binding Seriler}" Etiketler="{Binding Etiketler}" />
+                    </Grid>
+                </Border>
+
+                <Border Grid.Column="2" Style="{StaticResource Kart}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Margin="0,0,0,10">
+                            <TextBlock Text="Kategoriye göre stok değeri" Style="{StaticResource KartBasligi}" />
+                            <TextBlock Text="Alış fiyatı üzerinden" Style="{StaticResource Yazi.Kucuk}" Margin="0,2,0,0" />
+                        </StackPanel>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="170" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <k:HalkaGrafik Width="170" Height="170" Dilimler="{Binding Dilimler}" MerkezBaslik="Toplam" MerkezDeger="{Binding StokDegeri}" Kalinlik="18" VerticalAlignment="Center" />
+                            <ItemsControl Grid.Column="1" ItemsSource="{Binding KategoriListesi}" Margin="18,0,0,0" VerticalAlignment="Center" Focusable="False">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,5">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <Border Width="9" Height="9" CornerRadius="3" Background="{Binding Renk, Converter={StaticResource HexFirca}}" VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="1" Text="{Binding Ad}" Margin="9,0,8,0" FontSize="12.5" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource Metin2}" />
+                                            <TextBlock Grid.Column="2" Text="{Binding AltMetin}" FontSize="12.5" FontWeight="SemiBold" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- Listeler -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="16" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="16" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Kritik stoklar -->
+                <Border Style="{StaticResource Kart}" Padding="20,18,14,12">
+                    <StackPanel>
+                        <Grid Margin="0,0,6,10">
+                            <TextBlock Text="Kritik stoktaki ürünler" Style="{StaticResource KartBasligi}" />
+                            <Button Style="{StaticResource Dugme.Baglanti}" Content="Tümü →" FontSize="12.5" HorizontalAlignment="Right" Command="{Binding KritikleriGorCommand}" />
+                        </Grid>
+                        <ItemsControl ItemsSource="{Binding KritikUrunler}" Focusable="False">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,7">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding UrunAdi}" FontWeight="SemiBold" FontSize="13" TextTrimming="CharacterEllipsis" />
+                                            <TextBlock Text="{Binding Marka}" Style="{StaticResource Yazi.Kucuk}" Margin="0,1,0,0" />
+                                        </StackPanel>
+                                        <Border Grid.Column="1" Style="{StaticResource DurumRozeti}" Margin="8,0">
+                                            <TextBlock Text="{Binding EksikMetni}" Style="{StaticResource Rozet.Yazi}" FontSize="11.5" />
+                                        </Border>
+                                        <Button Grid.Column="2" Style="{StaticResource Dugme.Ikon}" a:Ui.Ikon="&#xE710;" ToolTip="Stok girişi yap"
+                                                Command="{Binding DataContext.StokGirisiCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <StackPanel Style="{StaticResource BosDurum}" Margin="0,24" Visibility="{Binding KritikUrunler, Converter={StaticResource DoluGorunur}, ConverterParameter=Ters}">
+                            <TextBlock Text="&#xE73E;" FontFamily="{StaticResource IkonYazi}" FontSize="22" Foreground="{DynamicResource BasariMetin}" HorizontalAlignment="Center" />
+                            <TextBlock Text="Tüm stoklar yeterli seviyede" Style="{StaticResource Yazi.Ikincil}" Margin="0,8,0,0" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Son hareketler -->
+                <Border Grid.Column="2" Style="{StaticResource Kart}" Padding="20,18,20,12">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,10">
+                            <TextBlock Text="Son hareketler" Style="{StaticResource KartBasligi}" />
+                            <Button Style="{StaticResource Dugme.Baglanti}" Content="Tümü →" FontSize="12.5" HorizontalAlignment="Right" Command="{Binding HareketleriGorCommand}" />
+                        </Grid>
+                        <ItemsControl ItemsSource="{Binding SonHareketler}" Focusable="False">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,7">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Border Style="{StaticResource TurRozeti}" Width="34" Height="34" CornerRadius="10" Padding="0" Margin="0,0,12,0">
+                                            <TextBlock Text="{Binding TurIkon}" FontFamily="{StaticResource IkonYazi}" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Border>
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding UrunAdi}" FontWeight="SemiBold" FontSize="13" TextTrimming="CharacterEllipsis" />
+                                            <TextBlock Style="{StaticResource Yazi.Kucuk}" TextTrimming="CharacterEllipsis" Margin="0,1,0,0">
+                                                <Run Text="{Binding KullaniciAdi, Mode=OneWay}" /><Run Text=" · " /><Run Text="{Binding GoreceliTarih, Mode=OneWay}" />
+                                            </TextBlock>
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="2" Text="{Binding MiktarMetni}" FontWeight="SemiBold" VerticalAlignment="Center" Margin="10,0,0,0">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="{DynamicResource TehlikeMetin}" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Artis}" Value="True">
+                                                            <Setter Property="Foreground" Value="{DynamicResource BasariMetin}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <StackPanel Style="{StaticResource BosDurum}" Margin="0,24" Visibility="{Binding SonHareketler, Converter={StaticResource DoluGorunur}, ConverterParameter=Ters}">
+                            <TextBlock Text="&#xE8AB;" FontFamily="{StaticResource IkonYazi}" FontSize="22" Foreground="{DynamicResource Metin3}" HorizontalAlignment="Center" />
+                            <TextBlock Text="Henüz stok hareketi yok" Style="{StaticResource Yazi.Ikincil}" Margin="0,8,0,0" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- En çok satanlar -->
+                <Border Grid.Column="4" Style="{StaticResource Kart}" Padding="20,18,20,12">
+                    <StackPanel>
+                        <StackPanel Margin="0,0,0,10">
+                            <TextBlock Text="En çok satanlar" Style="{StaticResource KartBasligi}" />
+                            <TextBlock Text="{Binding DonemMetni}" Style="{StaticResource Yazi.Kucuk}" Margin="0,2,0,0" />
+                        </StackPanel>
+                        <ItemsControl ItemsSource="{Binding EnCokSatanlar}" Focusable="False">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,7">
+                                        <Grid>
+                                            <TextBlock Text="{Binding Ad}" FontWeight="SemiBold" FontSize="13" TextTrimming="CharacterEllipsis" Margin="0,0,70,0" />
+                                            <TextBlock Text="{Binding DegerMetni}" FontWeight="SemiBold" FontSize="13" HorizontalAlignment="Right" />
+                                        </Grid>
+                                        <Grid Margin="0,7,0,0" x:Name="ray" Height="6">
+                                            <Border Background="{DynamicResource Yuzey3}" CornerRadius="3" />
+                                            <Border Background="{Binding Renk, Converter={StaticResource HexFirca}}" CornerRadius="3" HorizontalAlignment="Left">
+                                                <Border.Width>
+                                                    <MultiBinding Converter="{StaticResource OranGenislik}">
+                                                        <Binding Path="Oran" />
+                                                        <Binding Path="ActualWidth" ElementName="ray" />
+                                                    </MultiBinding>
+                                                </Border.Width>
+                                            </Border>
+                                        </Grid>
+                                        <TextBlock Text="{Binding AltMetin}" Style="{StaticResource Yazi.Kucuk}" Margin="0,4,0,0" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <StackPanel Style="{StaticResource BosDurum}" Margin="0,24" Visibility="{Binding EnCokSatanlar, Converter={StaticResource DoluGorunur}, ConverterParameter=Ters}">
+                            <TextBlock Text="&#xE7BF;" FontFamily="{StaticResource IkonYazi}" FontSize="22" Foreground="{DynamicResource Metin3}" HorizontalAlignment="Center" />
+                            <TextBlock Text="Bu dönemde satış yok" Style="{StaticResource Yazi.Ikincil}" Margin="0,8,0,0" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,59 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Koyu tema renkleri. Açık temada aynı anahtarlar farklı renklerle tanımlıdır. -->
+    <SolidColorBrush x:Key="Arka" Color="#0B0E15" />
+    <SolidColorBrush x:Key="Yuzey" Color="#121722" />
+    <SolidColorBrush x:Key="Yuzey2" Color="#171D2A" />
+    <SolidColorBrush x:Key="Yuzey3" Color="#1E2534" />
+    <SolidColorBrush x:Key="Kabarik" Color="#151B27" />
+    <SolidColorBrush x:Key="Cizgi" Color="#222A38" />
+    <SolidColorBrush x:Key="Cizgi2" Color="#303A4C" />
+
+    <SolidColorBrush x:Key="Metin" Color="#EEF1F6" />
+    <SolidColorBrush x:Key="Metin2" Color="#A3ACBC" />
+    <SolidColorBrush x:Key="Metin3" Color="#6E788A" />
+
+    <SolidColorBrush x:Key="Vurgu" Color="#3D7EFF" />
+    <SolidColorBrush x:Key="VurguHover" Color="#5A92FF" />
+    <SolidColorBrush x:Key="VurguBasili" Color="#2F6AE0" />
+    <SolidColorBrush x:Key="VurguYumusak" Color="#243D7EFF" />
+    <SolidColorBrush x:Key="VurguMetin" Color="#8DB4FF" />
+    <Color x:Key="VurguRengi">#3D7EFF</Color>
+
+    <SolidColorBrush x:Key="Basari" Color="#22C55E" />
+    <SolidColorBrush x:Key="BasariYumusak" Color="#2222C55E" />
+    <SolidColorBrush x:Key="BasariMetin" Color="#4ADE80" />
+
+    <SolidColorBrush x:Key="Uyari" Color="#F59E0B" />
+    <SolidColorBrush x:Key="UyariYumusak" Color="#22F59E0B" />
+    <SolidColorBrush x:Key="UyariMetin" Color="#FBBF24" />
+
+    <SolidColorBrush x:Key="Tehlike" Color="#EF4444" />
+    <SolidColorBrush x:Key="TehlikeHover" Color="#F25C5C" />
+    <SolidColorBrush x:Key="TehlikeYumusak" Color="#22EF4444" />
+    <SolidColorBrush x:Key="TehlikeMetin" Color="#F87171" />
+
+    <SolidColorBrush x:Key="Perde" Color="#B8040609" />
+    <SolidColorBrush x:Key="SatirHover" Color="#0AFFFFFF" />
+    <SolidColorBrush x:Key="SatirSecili" Color="#1C3D7EFF" />
+    <SolidColorBrush x:Key="Izgara" Color="#1C2330" />
+    <SolidColorBrush x:Key="Kaydirma" Color="#2E3746" />
+    <SolidColorBrush x:Key="KaydirmaHover" Color="#465166" />
+    <Color x:Key="GolgeRengi">#000000</Color>
+    <sys:Double xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Key="GolgeOpakligi">0.45</sys:Double>
+
+    <!-- Kenar çubuğu her iki temada da koyu kalır (marka kimliği) -->
+    <LinearGradientBrush x:Key="Kenar.Arka" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#0A0E18" Offset="0" />
+        <GradientStop Color="#070A11" Offset="1" />
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="Kenar.Metin" Color="#E6EAF2" />
+    <SolidColorBrush x:Key="Kenar.Metin2" Color="#8590A3" />
+    <SolidColorBrush x:Key="Kenar.Hover" Color="#0FFFFFFF" />
+    <SolidColorBrush x:Key="Kenar.Cizgi" Color="#161C28" />
+    <SolidColorBrush x:Key="Kenar.Kart" Color="#0DFFFFFF" />
+
+    <DropShadowEffect x:Key="Golge.Buyuk" BlurRadius="44" ShadowDepth="14" Direction="270" Color="#000000" Opacity="0.55" />
+    <DropShadowEffect x:Key="Golge.Orta" BlurRadius="22" ShadowDepth="6" Direction="270" Color="#000000" Opacity="0.45" />
+</ResourceDictionary>
